@@ -1,20 +1,45 @@
 import { test, expect } from '@playwright/test'
+import { generateOrderId } from '../support/helpers';
 
-test('deve consultar um pedido aprovado', async ({ page }) => {
-  const orderId = 'VLO-X7NNRD'
+test.describe('Pedidos', () => {
 
-  await page.goto('http://localhost:5173/')
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173/')
 
-  await expect(page.getByTestId('hero-section').getByRole('heading')).toContainText('Velô Sprint')
+    await expect(page.getByTestId('hero-section').getByRole('heading')).toContainText('Velô Sprint')
 
-  await page.getByRole('link', { name: 'Consultar Pedido' }).click()
-  await expect(page.getByRole('heading')).toContainText('Consultar Pedido')
+    await page.getByRole('link', { name: 'Consultar Pedido' }).click()
+    await expect(page.getByRole('heading')).toContainText('Consultar Pedido')
+  })
 
-  await page.getByLabel('Número do Pedido').fill(orderId)
-  await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+  test('deve consultar um pedido aprovado', async ({ page }) => {
+    const orderId = generateOrderId()
+    const orderStatus = 'APROVADO'
 
-  await expect(page.locator('//p[text()="Pedido"]')).toBeVisible()
-  await expect(page.locator(`//p[text()="${orderId}"]`)).toBeVisible()
+    await page.getByLabel('Número do Pedido').fill(orderId)
+    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
 
-  await expect(page.locator('//div[text()="APROVADO"]')).toBeVisible()
+    const containerPedido = page.getByRole('paragraph')
+      .filter({ hasText: /^Pedido$/ })
+      .locator('..') //Sobe para o elemento pai (a div que agrupa ambos)
+
+    await expect(containerPedido).toContainText(orderId, { timeout: 10_000 })
+
+    await expect(page.getByText(orderStatus)).toBeVisible()
+  })
+
+  test('deve exibir uma mensagem quando o pedido não é encontrado', async ({ page }) => {
+    const orderId = generateOrderId()
+
+    await page.getByLabel('Número do Pedido').fill(orderId)
+    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+
+    await expect(page.locator('#root')).toMatchAriaSnapshot(`
+    - img
+    - heading "Pedido não encontrado" [level=3]
+    - paragraph: Verifique o número do pedido e tente novamente
+    `);
+
+  })
 })
+
