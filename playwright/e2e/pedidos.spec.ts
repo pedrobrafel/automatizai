@@ -6,7 +6,7 @@ test.describe('Consulta de Pedido', () => {
   test.beforeEach(async ({ app }) => {
     await app.orderLookup.open()
   })
- 
+
   test('deve consultar um pedido aprovado', async ({ app }) => {
     const order: OrderDetails = {
       number: 'VLO-X7NNRD',
@@ -71,5 +71,15 @@ test.describe('Consulta de Pedido', () => {
     const order = 'VLO-INVALID'
     await app.orderLookup.searchOrder(order)
     await app.orderLookup.validateOrderNotFound()
+  })
+
+  test('deve manter o botão de busca desabilitado quando o campo de busca estiver vazio', async ({ app }) => {
+    const button = app.orderLookup.elements.searchButton
+    const input = app.orderLookup.elements.orderInput
+
+    await expect(button).toBeDisabled()
+    await input.fill(' ')
+    await expect(button).toBeDisabled()
+
   })
 })
