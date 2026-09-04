@@ -10,8 +10,11 @@ export type OrderDetails = {
   customer: {
     name: string
     email: string
+    document: string
+    phone: string
   }
-  payment: string
+  payment: string,
+  total_price: string
 }
 
 export function createOrderLookupActions(page: Page) {

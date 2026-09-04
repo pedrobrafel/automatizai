@@ -1,6 +1,8 @@
 import { test, expect } from '../support/fixtures'
 import { generateOrderCode } from '../support/helpers'
-import { OrderDetails } from '../support/actions/orderLookupActions'
+import type { OrderDetails } from '../support/actions/orderLookupActions'
+import { insertOrder, deleteOrderByNumber } from '../support/database/orderRepository'
+import testData from '../support/fixtures/orders.json' with { type: 'json' }
 
 test.describe('Consulta de Pedido', () => {
   test.beforeEach(async ({ app }) => {
@@ -8,17 +10,10 @@ test.describe('Consulta de Pedido', () => {
   })
 
   test('deve consultar um pedido aprovado', async ({ app }) => {
-    const order: OrderDetails = {
-      number: 'VLO-X7NNRD',
-      status: 'APROVADO' as const,
-      color: 'Lunar White',
-      wheels: 'sport Wheels',
-      customer: {
-        name: 'Pedro Felix',
-        email: 'pbrafel@automatiza.dev'
-      },
-      payment: 'À Vista'
-    }
+    const order = testData.aprovado as OrderDetails
+
+    await deleteOrderByNumber(order.number)
+    await insertOrder(order)
 
     await app.orderLookup.searchOrder(order.number)
     await app.orderLookup.validateOrderDetails(order)
@@ -26,17 +21,10 @@ test.describe('Consulta de Pedido', () => {
   })
 
   test('deve consultar um pedido reprovado', async ({ app }) => {
-    const order: OrderDetails = {
-      number: 'VLO-WSHVU0',
-      status: 'REPROVADO' as const,
-      color: 'Midnight Black',
-      wheels: 'sport Wheels',
-      customer: {
-        name: 'John Doe',
-        email: 'johndoe@automatiza.dev'
-      },
-      payment: 'À Vista'
-    }
+    const order = testData.reprovado as OrderDetails
+
+    await deleteOrderByNumber(order.number)
+    await insertOrder(order)
 
     await app.orderLookup.searchOrder(order.number)
     await app.orderLookup.validateOrderDetails(order)
@@ -44,17 +32,10 @@ test.describe('Consulta de Pedido', () => {
   })
 
   test('deve consultar um pedido em analise', async ({ app }) => {
-    const order: OrderDetails = {
-      number: 'VLO-AG0RXZ',
-      status: 'EM ANALISE' as const,
-      color: 'Glacier Blue',
-      wheels: 'sport Wheels',
-      customer: {
-        name: 'Avel Ocidade',
-        email: 'avel@automatiza.dev'
-      },
-      payment: 'À Vista'
-    }
+    const order = testData.em_analise as OrderDetails
+
+    await deleteOrderByNumber(order.number)
+    await insertOrder(order)
 
     await app.orderLookup.searchOrder(order.number)
     await app.orderLookup.validateOrderDetails(order)

@@ -1,0 +1,44 @@
+{
+  "aprovado": {
+    "number": "VLO-SE4R01",
+    "status": "APROVADO",
+    "color": "Glacier Blue",
+    "wheels": "sport Wheels",
+    "customer": {
+      "name": "Pedro Felix",
+      "email": "pbrafel@automatiza.dev",
+      "document": "111.685.616-63",
+      "phone": "(35) 99189-0635"
+    },
+    "payment": "À Vista",
+    "total_price": "40000"
+  },
+  "reprovado": {
+    "number": "VLO-SE4R02",
+    "status": "REPROVADO",
+    "color": "Midnight Black",
+    "wheels": "sport Wheels",
+    "customer": {
+      "name": "John Doe",
+      "email": "johndoe@automatiza.dev",
+      "document": "222.222.222-22",
+      "phone": "(21) 99999-9999"
+    },
+    "payment": "À Vista",
+    "total_price": "40000"
+  },
+  "em_analise": {
+    "number": "VLO-SE4R03",
+    "status": "EM ANALISE",
+    "color": "Lunar White",
+    "wheels": "sport Wheels",
+    "customer": {
+      "name": "Avel Ocidade",
+      "email": "avel@automatiza.dev",
+      "document": "333.333.333-33",
+      "phone": "(33) 93333-3333"
+    },
+    "payment": "À Vista",
+    "total_price": "40000"
+  }
+}
