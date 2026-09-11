@@ -30,7 +30,7 @@ export function createCheckoutActions(page: Page) {
             await expect(page.getByTestId('summary-total-price')).toHaveText(price)
         },
 
-        async fillCustomerData(data: {
+        async fillCustomerlData(data: {
             name: string
             lastname: string
             email: string
@@ -56,5 +56,10 @@ export function createCheckoutActions(page: Page) {
         async submit() {
             await page.getByRole('button', { name: 'Confirmar Pedido' }).click()
         },
+
+        async selectPaymentMethod(method: string) {
+            await page.getByTestId('payment-avista').click()
+        }
+
     }
 }
